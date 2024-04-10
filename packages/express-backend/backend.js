@@ -44,6 +44,19 @@ const addUser = (user) => {
     return user;
 };
 
+const deleteUser = (userId) => {
+    const userIndex = users["users_list"].findIndex(user => user.id === userId);
+  
+    if (userIndex !== -1) {
+      const deletedUser = users["users_list"].splice(userIndex, 1)[0];
+      console.log(`User with ID ${userId} has been deleted.`);
+      return deletedUser;
+    } else {
+      console.log(`User with ID ${userId} not found.`);
+      return null;
+    }
+  };
+
 app.use(express.json());
 
 app.post("/users", (req, res) => {
@@ -83,7 +96,8 @@ app.listen(port, () => {
     );
 });
 
-// app.delete("/users", (req, res) => {
-//     const 
-
-// });
+app.delete("/users/:id", (req, res) => {
+    const userId = req.params.id;
+    deleteUser(userId);
+    res.status(204).send();
+  });
