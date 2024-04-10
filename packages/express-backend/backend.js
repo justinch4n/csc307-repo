@@ -80,6 +80,16 @@ app.get("/users", (req, res) => {
     }
 });
 
+app.get("/users/:name", (req, res) => {
+    const name = req.params["name"]; //or req.params.name
+    let result = findUserByName(name);
+    if (result === [undefined]) {
+        res.status(404).send("Resource not found. L");
+    } else {
+        res.send(result);
+    }
+});
+
 app.get("/users/:id", (req, res) => {
     const id = req.params["id"]; //or req.params.id
     let result = findUserById(id);
