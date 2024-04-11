@@ -57,6 +57,12 @@ const deleteUser = (userId) => {
     }
   };
 
+const findUserByName_Job = (name, job) => {
+    return users["users_list"].filter(
+    (user) => (user["name"] === name &&
+    user["job"] === job) 
+)}; 
+
 app.use(express.json());
 
 app.post("/users", (req, res) => {
@@ -80,13 +86,15 @@ app.get("/users", (req, res) => {
     }
 });
 
-app.get("/users/:name", (req, res) => {
-    const name = req.params["name"]; //or req.params.name
-    let result = findUserByName(name);
-    if (result === [undefined]) {
-        res.status(404).send("Resource not found. L");
+app.get("/users", (req, res) => { //Formated ?name=[name]&job=[job]
+    const name = req.query.name;
+    const job = req.query.job;
+    if (name && job ) {
+        let result = findUserByName_Job(name, job) ;
+        result = {users_list: result };
+        res.send (result);
     } else {
-        res.send(result);
+    res.send ("Failed");
     }
 });
 
