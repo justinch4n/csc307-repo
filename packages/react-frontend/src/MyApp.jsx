@@ -12,13 +12,24 @@ function MyApp() {
     });
     setCharacters(updated);
   }
-  function updateList(person) { 
+  function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((res) => {
+        if (res.status === 201) {
+          fetchUsers()
+            .then((res) => res.json())
+            .then((json) => setCharacters(json["users_list"]))
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log("User addition failed");
+        }
+      })
       .catch((error) => {
         console.log(error);
-      })
-}
+      });
+  }
 
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");

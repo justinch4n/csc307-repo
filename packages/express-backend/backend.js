@@ -40,9 +40,14 @@ const findUserByName = (name) => {
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
 
+const generateUniqueId = () => {
+    return Math.floor(Math.random() * 1000000).toString();
+};
+
 const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
+    const newUser = { id: generateUniqueId(), ...user  };
+    users["users_list"].push(newUser);
+    return newUser;
 };
 
 const deleteUser = (userId) => {
@@ -69,8 +74,8 @@ app.use(express.json());
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const newUser = addUser(userToAdd);
+    res.status(201).send(newUser);
 });
 
 app.get("/", (req, res) => {
